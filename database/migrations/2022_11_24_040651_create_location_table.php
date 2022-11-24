@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('location', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('img');
-            $table->string('type');
-            $table->string('address');
-            $table->string('website');
-            $table->string('phone_number');
+            $table->string('img')->nullable();
+            $table->string('type')->nullable();
+            $table->string('address')->nullable();
+            $table->string('website')->nullable();
+            $table->string('phone_number')->nullable();
             $table->geometry('geometry');
             $table->timestamps();
         });

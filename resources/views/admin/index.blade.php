@@ -4,9 +4,15 @@
  <title>Tìm kiếm địa điểm y tế</title>
 @stop
 
+@section('head')
+<link rel="stylesheet" href="./assets/leaflet/leaflet.draw.css">
+<script src="./assets/leaflet/leaflet.draw.js"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+@stop
+
 @section('content')
-  <div id="map">
     @include('layouts.nav')
-  </div>
+    @include('admin.add')
+    <div id="map"></div>
   <script src="/assets/js/admin.js"></script>
 @stop

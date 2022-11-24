@@ -68,20 +68,20 @@
             </div>
         </div>
     </div>
-    <div class="user">
+</div>
+<div class="user">
         <?php if (Auth::check()) :  ?>
             <div class="dropdown">
                 <i class="fa-solid fa-circle-user"></i>
                 <div class="dropdown-content">
                     <?php $user=Auth::user() ?? null; if ($user->role == "admin") : ?>
                         <a id="admin" href="/admin">Map Editor</a>
+                        <hr>
                     <?php endif; ?>
-                    <hr>
                     <a role="button" href="/logout">Log Out</a>
                 </div>
             </div>
         <?php else : ?>
             <a id="signin" href="/login">Log In</a>
         <?php endif; ?>
-    </div>
     </div>

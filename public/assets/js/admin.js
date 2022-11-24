@@ -1,5 +1,6 @@
 //Ban do nen
 var map = L.map('map').setView([10.031021579004767, 105.76911459944654], 13);
+
 var mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: 'map&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -45,7 +46,18 @@ var polygonStyle={color: "red", fillColor: "yellow", weight: 4};
 
 var geturl = './getGeo?format=GeoJSON&q=' //Url lấy data dạng GeoJSON
 var sql = "SELECT Id,  AsText(geometry) AS wkt, name FROM location";
-$.getJSON(geturl + sql, function(data) {
+
+$.getJSON(geturl + sql, function(data){ setMap(data) });
+
+const info = document.querySelector(".feature_menu");
+const infoClose = document.querySelector(".fcontrol")
+
+infoClose.addEventListener('click',function(){
+    info.classList.remove('active');
+    infoClose.classList.remove('active');
+});
+
+function setMap(data){
     L.geoJSON(data, {
         style: function (feature) {
             switch (feature.geometry.type) {
@@ -56,18 +68,24 @@ $.getJSON(geturl + sql, function(data) {
         // pointToLayer: function (feature, latlng){
         //     return L.marker(latlng, {icon:pointStyle});			
         // },
-        onEachFeature: function(feature, layer) {
-            if (feature.properties && feature.properties.name) {
-                layer.bindPopup("<i>" + feature.properties.name + "</i>");
-            }
+        onEachFeature: function(feature,layer){
+            layer.on('click', function(e){
+                info.classList.add('active');
+                infoClose.classList.add('active');
+            });
         }
+        // function(feature, layer) {
+        //     if (feature.properties && feature.properties.name) {
+        //         layer.bindPopup("<i>" + feature.properties.name + "</i>");
+        //     }
+        // }
     }).addTo(layerObject);
-});
+}
 
 //Thêm điều khiển vẽ; Icon mặc nhiên trong thư mục css/images
 //https://cdnjs.com/libraries/leaflet.draw
 var drawnItems = L.featureGroup().addTo(map);
-new L.Control.Draw({ edit: { featureGroup: drawnItems }}).addTo(map);
+new L.Control.Draw({ edit: { featureGroup: drawnItems }, position: "topright" }).addTo(map);
 
 //layer để giữ đối tượng đang vẽ hoặc đang được chọn
 var layer=new L.Layer();
@@ -94,80 +112,17 @@ map.on("draw:created", function(e) {
     
 });
 
+function featureMenu(data){
+    info.classList.add("active");
+    console.log(data);
+}		
+
 drawnItems.on('popupopen', function (e){
     layer=e.layer;
 });				
 
 $("body").on("click", "#submit", addprops);
 
-var seturl = "./setGeo";
-
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
-$("#save").on("click", function() {
-    drawnItems.eachLayer(function(layer) {
-        var drawing = JSON.stringify(layer.toGeoJSON().geometry),
-            geo=layer.toGeoJSON();
-
-        var sql2 = 
-        "INSERT INTO dulieumau (the_geom, name) " + 
-        "VALUES (ST_GeomFromGeoJSON('" + 
-        drawing + "'), '" + geo.properties.name + "')";
-
-        $.post({
-            url: seturl,
-            data: {"q": sql2},
-            dataType: "json",
-            success: reloadMap,
-            error: function() {
-                alert("Có lỗi xảy ra khi lưu dữ liệu");
-                console.log("Problem saving the data");
-            }
-        });
-        L.geoJSON(layer.toGeoJSON(),{
-            onEachFeature:function(feature,layer){
-                layer.bindPopup(layer.feature.properties.name);
-            }
-        }).addTo(layerObject);
-        
-    });
-    drawnItems.clearLayers();
-});
-
-function reloadMap() {
-    layerObject.clearLayers();
-    $.getJSON(url + sql, function(data) {
-        L.geoJSON(data, {
-            style: function (feature) {
-                switch (feature.geometry.type) {
-                    case 'LineString':   return lineStyle;
-                    case 'Polygon':   return polygonStyle;
-                }
-            },
-            onEachFeature: function(feature, layer) {
-                if (feature.properties && feature.properties.name) {
-                    layer.bindPopup("<i>" + feature.properties.name + "</i> <button>XX</button>");
-                }
-            },
-            pointToLayer:function(feature,latlng){
-                return L.marker(latlng, {icon:pointStyle});
-            }
-        }).addTo(layerObject);
-    });
-
-    $("#combobox1").empty();
-    $.getJSON(url3 + sql3, function(data) {
-        var menu = $("#combobox1");
-        menu.append("<option value=''>Chọn đối tượng</option>");
-        $.each(data, function(key, value) {
-            menu.append("<option value="+value.id+">" + value.name + "</option>");
-        });
-    });
-};
 function addprops(){
     layer.feature={};
     layer.feature.type="Feature";
@@ -185,6 +140,52 @@ function addprops(){
     
     layer.bindPopup(content).closePopup();
 }
+
+var seturl = "./setGeo";
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$("#save").on("click", function() {
+    drawnItems.eachLayer(function(layer) {
+        var drawing = JSON.stringify(layer.toGeoJSON().geometry), geo=layer.toGeoJSON();
+
+        var sql2 = "INSERT INTO location (geometry, name) VALUES (ST_GeomFromGeoJSON('" + drawing + "'), '" + geo.properties.name + "')";
+
+        $.post({
+            url: seturl,
+            data: {"q": sql2},
+            dataType: "json",
+            success: alert("Thêm thành công"),  
+            error: alert("Có lỗi xảy ra khi lưu dữ liệu")
+        });
+
+        L.geoJSON(layer.toGeoJSON(),{
+            onEachFeature:function(feature,layer){
+                layer.bindPopup(layer.feature.properties.name);
+            }
+        }).addTo(layerObject);
+        
+    });
+    drawnItems.clearLayers();
+});
+
+function reload() {
+    layerObject.clearLayers();
+    $.getJSON(geturl + sql, function(data){ setMap(data) });
+
+    $("#combobox1").empty();
+    $.getJSON(geturl2 + sql3, function(data) {
+        var menu = $("#combobox1");
+        menu.append("<option value=''>Chọn đối tượng</option>");
+        $.each(data, function(key, value) {
+            menu.append("<option value="+value.id+">" + value.name + "</option>");
+        });
+    });
+};
 //Xoa
 //Thêm điều khiển mới là combo box rỗng lên bản đồ
 var control1 = L.control({position: "topleft"});
@@ -196,10 +197,10 @@ return div;
 control1.addTo(map);
 
 //Lấy giá trị của cột Name không trùng thêm vào combo box
-var sql3 = "SELECT id, name FROM dulieumau ORDER BY name";
-var url3 ="./getdata?q=";
+var sql3 = "SELECT id, name FROM location ORDER BY name";
+var geturl2 ="./getGeo?q=";
 
-$.getJSON(url3 + sql3, function(data) {
+$.getJSON(geturl2 + sql3, function(data) {
 var menu = $("#combobox1");
 menu.append("<option value=''>Chọn đối tượng</option>");
 $.each(data, function(key, value) {
@@ -207,16 +208,16 @@ $.each(data, function(key, value) {
 });
 });
 
-var url4 = "./delete";
+var deleteurl = "./deleteGeo";
 $("#delete").on("click", function() {
 var valueSelected = $("#combobox1").val();
 if(valueSelected!=''){
-    var sql4 = "DELETE FROM `dulieumau` WHERE id="+valueSelected;
+    var sql4 = "DELETE FROM `location` WHERE id="+valueSelected;
     $.post({
-        url: url4,
+        url: deleteurl,
         data: {"q": sql4},
         dataType: "json",
-        success: reloadMap,
+        success: reload,
         error: function() {
             alert("Có lỗi xảy ra khi xoá dữ liệu");
         }

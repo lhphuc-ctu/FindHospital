@@ -9,6 +9,7 @@ html, body{
 }
 
 .main_header {
+  position: absolute;
   padding: 1% 1%;
   display: flex;
   justify-content: space-between;
@@ -49,7 +50,10 @@ html, body{
 }
 
 .user {
-  z-index: 500;
+  position: absolute;
+  right: 15px;
+  top: 25px;
+  z-index: 500
 }
 
 .user #signin {
@@ -73,7 +77,7 @@ html, body{
 }
 
 .navbar_menu {
-  position: absolute;
+  position: fixed;
   content: "";
   top: 0;
   left: 0;
@@ -157,35 +161,9 @@ html, body{
   display: block;
 }
 
-#id01 label {
-  margin: 0;
-}
-
-#id02 img {
-  height: 18px;
-  width: 18px;
-  margin-left: 5px;
-  display: block;
-}
-
 .link_list label:hover,
 .link_list p:hover {
   color: blue;
-}
-
-#map { height: 100%; }
-
-.leaflet-verticalcenter {
-  position: absolute;
-  z-index: 1000;
-  pointer-events: none;
-  bottom: 10px;
-  transform: translateY(-10%);
-  padding-top: 10px;
-}
-
-.leaflet-verticalcenter .leaflet-control {
-  margin-bottom: 10px;
 }
 
 .login_container {
@@ -291,7 +269,7 @@ html, body{
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 100px;
+  min-width: 110px;
   box-shadow: 0 8px 16px #0003;
   padding: 10px 18px;
   z-index: 1;
@@ -305,3 +283,95 @@ html, body{
 .dropdown-content a {
   text-decoration: none;
 }
+
+.feature_menu {
+  position: absolute;
+  top: 0;
+  background-color: #fff;
+  width: 405px;
+  height: 100%;
+  z-index: 420;
+  left: -500px;
+  transition: 0.5s;
+  overflow-y: auto;
+}
+
+.feature_menu.active {
+  left: 0;
+}
+
+.fcontrol {
+  position: absolute;
+  z-index: 410;
+  top: 45%;
+  left: -30px;
+  transition: 0.5s;
+  overflow-y: auto;
+}
+
+.fcontrol.active{
+  left: 405px;
+}
+
+.fcontrol button {
+  background: #fff;
+  border: 0;
+  box-shadow: 0 1px 2px rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+  width: 23px;
+  height: 48px;
+  border-left: 1px solid rgb(218,220,224);
+  border-radius: 0 8px 8px 0;
+}
+
+#map { height: 100%; }
+
+.leaflet-verticalcenter {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+  bottom: 10px;
+  transform: translateY(-10%);
+  padding-top: 10px;
+}
+
+.leaflet-verticalcenter .leaflet-control {
+  margin-bottom: 10px;
+}
+
+.leaflet-top {
+  top: 15%
+}
+
+.leaflet-left {
+  left: 1%;
+}
+
+.leaflet-touch .leaflet-control-zoom-display {
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-toolbar-0 > li > a {
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  line-height: 45px;
+  background-size: 314px 30px;
+}
+
+.leaflet-touch .leaflet-draw-toolbar.leaflet-bar a {
+  background-position-y: 6px;
+}
+
+.leaflet-touch .leaflet-draw-actions a, .leaflet-touch .leaflet-control-toolbar .leaflet-toolbar-1 > li > .leaflet-toolbar-icon {
+  font-size: 20px;
+  line-height: 44px;
+  height: 44px;
+}
+
+.leaflet-touch .leaflet-draw-actions, .leaflet-touch .leaflet-toolbar-1 {
+  left: 45px;
+}
+
