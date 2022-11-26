@@ -63,26 +63,69 @@ $.getJSON(geturl + sql, function(data){ setMap(data) });
 const info = document.querySelector(".feature_menu");
 const infoClose = document.querySelector(".fcontrol")
 
-infoClose.addEventListener('click',function(){
-    info.classList.remove('active');
-    infoClose.classList.remove('active');
-});
+infoClose.addEventListener('click', fmenuHide);
 
 const featureName = document.querySelector("#feature_name");
 const featureType = document.querySelector("#feature_type");
 const featureAddress = document.querySelector("#feature_address");
 const featureWebsite = document.querySelector("#feature_website");
 const featurePhone = document.querySelector("#feature_phone");
+const featureEdit = document.querySelector(".featureEdit");
+const featureDelete = document.querySelector(".featureDelete");
+const featureImg = document.querySelector(".feature_img img")
 
+featureEdit.addEventListener('click', function(){
+
+});
+
+var deleteurl = "./deleteGeo";
+featureDelete.addEventListener('click', function(){
+    var id = featureDelete.value;
+    if(id){
+        var sql4 = "DELETE FROM `location` WHERE id="+id;
+        $.post({
+            url: deleteurl,
+            data: {"q": sql4},
+            dataType: "json",
+            success: function() {
+                alert("Xoá thành công!");
+                fmenuHide();
+                reload();
+            },
+            error: function() {
+                alert("Có lỗi xảy ra khi xoá dữ liệu");
+            }
+        });
+    }
+    else{
+        alert("Đối tượng không hợp lệ")
+    }
+});
 
 function featureData(feature){
     if (feature.properties){
+        if (feature.properties.id) {
+            featureDelete.value = feature.properties.id;
+            featureEdit.value = feature.properties.id;
+        }
         if (feature.properties.name) featureName.replaceChildren(feature.properties.name);
+        if (feature.properties.img) featureImg.src="./images/"+feature.properties.img;
+            else featureImg.src="/assets/images/default_img.png";
         if (feature.properties.type) featureType.replaceChildren(feature.properties.type);
         if (feature.properties.address) featureAddress.replaceChildren(feature.properties.address);
         if (feature.properties.website) featureWebsite.replaceChildren(feature.properties.website);
         if (feature.properties.phone_number) featurePhone.replaceChildren(feature.properties.phone_number);
     }
+}
+
+function fmenuShow(){
+    info.classList.add('active');
+    infoClose.classList.add('active');
+}
+
+function fmenuHide(){
+    info.classList.remove('active');
+    infoClose.classList.remove('active');
 }
 
 function setMap(data){
@@ -95,9 +138,7 @@ function setMap(data){
         },
         onEachFeature: function(feature,layer){
             layer.on('click', function(e){
-                
-                info.classList.add('active');
-                infoClose.classList.add('active');
+                fmenuShow();
                 featureData(feature);
             });
             layer.on("mouseover",function(e){
@@ -127,9 +168,8 @@ control.onAdd = function(map) {
 control.addTo(map);
 
 const add = document.querySelector(".addfeature_menu");
-const submitbtn = document.querySelector(".addform #submit");
 const addcose = document.querySelector(".addfcontrol")
-
+addcose.addEventListener('click', addHide);
 
 function addShow(){
     add.classList.add('active');
@@ -141,8 +181,6 @@ function addHide(){
     addcose.classList.remove('active');
 }
 
-addcose.addEventListener('click', addHide);
-
 //Khi vẽ thì thêm vào lớp drawnItems
 map.on("draw:created", function(e) {
     layer=e.layer;
@@ -151,25 +189,52 @@ map.on("draw:created", function(e) {
     layer.on('click', addShow);
 });
 
-function filename(path){
-    sub = path.lastIndexOf('\\')+1;
-    res = path.substr(sub,path.length) ?? "";
-    return res;
-}
+$(".addform").on('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+        url:"./postImg",
+        type: "POST",
+        data:  new FormData(this),
+        contentType: false,
+        cache: false,
+        processData:false,
+        success: function(data){
+            if(data=='invalid') alert("File không hợp lệ");
+            else {
+                $("#img_name").val(data);
+                $(".feature_img img").attr('src',"./images/"+data).fadeIn(1000);
+            }
+        },
+        error: function(){
+            alert("Upload lỗi");
+        }          
+    })
+})
 
+const inputFile = document.querySelector("#img");
+inputFile.addEventListener('change', function(){
+    $(".addform").submit();
+})
+
+const submitbtn = document.querySelector(".addform #submit");
 submitbtn.addEventListener("click", function(){
     addHide();
+    setFeatureData();
+});
+
+function setFeatureData(){
     layer.feature={};
     layer.feature.type="Feature";
     layer.feature.properties={};
     layer.feature.properties.name=$("#name").val();
     layer.feature.properties.type=$("#type").val();
-    layer.feature.properties.img=filename($("#img").val());
+    layer.feature.properties.img=$("#img_name").val();
     layer.feature.properties.address=$("#address").val();
     layer.feature.properties.website=$("#website").val();
     layer.feature.properties.phone_number=$("#phone_number").val();
-});
-			
+    console.log(layer.feature);
+}
+
 var seturl = "./setGeo";
 
 $.ajaxSetup({
@@ -210,55 +275,4 @@ $("#save").on("click", function() {
 function reload() {
     layerObject.clearLayers();
     $.getJSON(geturl + sql, function(data){ setMap(data) });
-
-    $("#combobox1").empty();
-    $.getJSON(geturl2 + sql3, function(data) {
-        var menu = $("#combobox1");
-        menu.append("<option value=''>Chọn đối tượng</option>");
-        $.each(data, function(key, value) {
-            menu.append("<option value="+value.id+">" + value.name + "</option>");
-        });
-    });
 };
-//Xoa
-//Thêm điều khiển mới là combo box rỗng lên bản đồ
-var control1 = L.control({position: "topleft"});
-control1.onAdd = function(map) {
-var div = L.DomUtil.create("div", "div1");
-div.innerHTML = '<select id="combobox1"></select> <button id="delete">Xoá</button>';
-return div;
-};
-control1.addTo(map);
-
-//Lấy giá trị của cột Name không trùng thêm vào combo box
-var sql3 = "SELECT id, name FROM location ORDER BY name";
-var geturl2 ="./getGeo?q=";
-
-$.getJSON(geturl2 + sql3, function(data) {
-var menu = $("#combobox1");
-menu.append("<option value=''>Chọn đối tượng</option>");
-$.each(data, function(key, value) {
-    menu.append("<option value="+value.id+">" + value.name + "</option>");
-});
-});
-
-var deleteurl = "./deleteGeo";
-$("#delete").on("click", function() {
-var valueSelected = $("#combobox1").val();
-if(valueSelected!=''){
-    var sql4 = "DELETE FROM `location` WHERE id="+valueSelected;
-    $.post({
-        url: deleteurl,
-        data: {"q": sql4},
-        dataType: "json",
-        success: reload,
-        error: function() {
-            alert("Có lỗi xảy ra khi xoá dữ liệu");
-        }
-    });
-}
-else{
-    alert("Đối tượng không hợp lệ")
-}
-
-});

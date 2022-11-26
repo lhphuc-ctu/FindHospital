@@ -1,4 +1,4 @@
-<div class="container">
+<div class="infoContainer">
     <div class="feature_menu">
             <div class="feature_img">
                 <img src="/assets/images/default_img.png">
@@ -25,7 +25,7 @@
             <?php if (Auth::check()) :  ?>
                 <?php $user=Auth::user(); if ($user->role == "admin") : ?>
                     <div class="link_list fbutton">
-                        <button type="button" class="featureEdit"><i class="fa-regular fa-pen-to-square"></i></button>
+                        <button type="button" class="featureEdit" value="0"><i class="fa-regular fa-pen-to-square"></i></button>
                         <p></p>
                         <button type="button" class="featureDelete"><i class="fa-solid fa-trash"></i></button>
                     </div>

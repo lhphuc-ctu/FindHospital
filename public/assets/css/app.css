@@ -116,7 +116,7 @@ html, body{
   margin-right: auto;
 }
 
-.title_image img {
+.title_image img{
   height: 100%;
 }
 
@@ -377,6 +377,16 @@ html, body{
 .fbutton p {
   border-right: 1px solid;
 }
+.feature_img {
+  width: 408px;
+  height: 256px;
+}
+
+.feature_img img{
+  height: 100%;
+  width: 100%;
+}
+
 /* Leaflet */
 
 #map { height: 100%; }

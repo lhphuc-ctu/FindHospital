@@ -28,3 +28,4 @@ Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/getGeo', [GeoController::class, 'getGeo']);
 Route::post('/setGeo', [GeoController::class, 'setGeo']);
 Route::post('/deleteGeo', [GeoController::class, 'deleteGeo']);
+Route::post('/postImg', [GeoController::class, 'storeImage']);

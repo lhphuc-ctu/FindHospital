@@ -79,4 +79,11 @@ class GeoController extends Controller
         $res = DB::delete($sql);
         return $res;
     }
+
+    public function storeImage(Request $request){
+        $request->validate(['img' => 'required|image|mimes:png,jpg,jpeg|max:2048']);
+        $imageName = time().'.'.$request->img->extension();
+        $request->img->move(public_path('images'), $imageName);
+        return $imageName;
+    }
 }
