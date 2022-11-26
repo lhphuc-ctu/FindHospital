@@ -30,7 +30,12 @@ class GeoController extends Controller
                         'type' => 'Feature',
                         'properties' => array(
                             'id' => $item->Id,
-                            'name' => $item->name
+                            'name' => $item->name,
+                            'type' => $item->type,
+                            'address' => $item->address,
+                            'website' => $item->website,
+                            'phone_number' => $item->phone_number,
+                            'img' => $item->img,
                         ),
                         'geometry' => $geometry->parseWkt($item->wkt)->toArray()
                     );
@@ -42,6 +47,11 @@ class GeoController extends Controller
                         'properties' => array(
                             'id' => $item->Id,
                             'name' => $item->name,
+                            'type' => $item->type,
+                            'address' => $item->address,
+                            'website' => $item->website,
+                            'phone_number' => $item->phone_number,
+                            'img' => $item->img,
                             'dis_km' => $item->dis_km
                         ),
                         'geometry' => $geometry->parseWkt($item->wkt)->toArray()

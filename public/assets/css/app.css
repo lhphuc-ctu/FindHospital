@@ -132,7 +132,8 @@ html, body{
 
 .link_content {
   display: flex;
-  padding: 6px 22px;
+  padding: 12px 22px;
+  font-size: 1.1rem;
   align-items: center;
   color: #202124;
 }
@@ -284,11 +285,22 @@ html, body{
   text-decoration: none;
 }
 
-.feature_menu {
+.save-btn{
+  width: 44px;
+  height: 44px;
+  border: none;
+}
+
+.save-btn i {
+  font-size: 1.2rem;
+}
+
+.feature_menu,
+.addfeature_menu {
   position: absolute;
   top: 0;
   background-color: #fff;
-  width: 405px;
+  width: 408px;
   height: 100%;
   z-index: 420;
   left: -500px;
@@ -296,11 +308,12 @@ html, body{
   overflow-y: auto;
 }
 
-.feature_menu.active {
+.feature_menu.active,
+.addfeature_menu.active {
   left: 0;
 }
 
-.fcontrol {
+.fcontrol,.addfcontrol {
   position: absolute;
   z-index: 410;
   top: 45%;
@@ -309,11 +322,13 @@ html, body{
   overflow-y: auto;
 }
 
-.fcontrol.active{
+.fcontrol.active,
+.addfcontrol.active{
   left: 405px;
 }
 
-.fcontrol button {
+.fcontrol button,
+.addfcontrol button {
   background: #fff;
   border: 0;
   box-shadow: 0 1px 2px rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
@@ -322,6 +337,47 @@ html, body{
   border-left: 1px solid rgb(218,220,224);
   border-radius: 0 8px 8px 0;
 }
+
+.addfeature_menu .addform .input-field {
+  width: 100%;
+  padding: 10px 0;
+  margin: 10px 0;
+  border-left: 0;
+  border-top: 0;
+  border-right: 0;
+  background: transparent;
+  color: #000;
+}
+
+.addfeature_menu .addform #submit {
+  width: 45%;
+  padding: 10px 20px;
+  display: block;
+  background: #1d89ff;
+  border: 0;
+  margin: auto;
+  border-radius: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.fbutton {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.fbutton .featureEdit,
+.fbutton .featureDelete {
+  font-size: 1.25rem;
+  background: transparent;
+  border: none;
+  padding: 10px 20px;
+}
+  
+.fbutton p {
+  border-right: 1px solid;
+}
+/* Leaflet */
 
 #map { height: 100%; }
 
@@ -374,4 +430,3 @@ html, body{
 .leaflet-touch .leaflet-draw-actions, .leaflet-touch .leaflet-toolbar-1 {
   left: 45px;
 }
-

@@ -12,7 +12,8 @@
 
 @section('content')
     @include('layouts.nav')
-    @include('admin.add')
+    @include('admin.info')
+    @include('admin.addform')
     <div id="map"></div>
   <script src="/assets/js/admin.js"></script>
 @stop
