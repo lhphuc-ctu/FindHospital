@@ -22,12 +22,14 @@
                     <p id="feature_phone">Phone number</p>
                 </div>
             </div>
-            <?php $user=Auth::user() ?? null; if ($user->role == "admin") : ?>
-                <div class="link_list fbutton">
-                    <button type="button" class="featureEdit"><i class="fa-regular fa-pen-to-square"></i></button>
-                    <p></p>
-                    <button type="button" class="featureDelete"><i class="fa-solid fa-trash"></i></button>
-                </div>
+            <?php if (Auth::check()) :  ?>
+                <?php $user=Auth::user(); if ($user->role == "admin") : ?>
+                    <div class="link_list fbutton">
+                        <button type="button" class="featureEdit"><i class="fa-regular fa-pen-to-square"></i></button>
+                        <p></p>
+                        <button type="button" class="featureDelete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
     </div>
     <div class="fcontrol">

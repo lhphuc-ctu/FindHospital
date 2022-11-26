@@ -7,6 +7,7 @@
 @section('content')
   <div id="map">
     @include('layouts.nav')
+    @include('layouts.info')
   </div>
   <script src="/assets/js/map.js"></script>
 @stop
