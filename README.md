@@ -15,7 +15,7 @@ Guide
 ============
 Migration & Seeding
 
-    php artisan migration
+     php artisan migrate
     php artisan db:seed UserSeeder
 
 Run
