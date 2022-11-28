@@ -13,10 +13,15 @@ Requirements
 
 Guide
 ============
-Migration & Seeding
+Migrate data
 
-     php artisan migrate
+    php artisan migrate
+
+
+Seeding
+
     php artisan db:seed UserSeeder
+
 
 Run
 
