@@ -13,12 +13,16 @@
             </div>
             <div class="link_list">
                 <div class="link_content">
+                    <i class="fa-solid fa-location-dot"></i>
                     <p id="feature_address">Address</p>
                 </div>
                 <div class="link_content">
-                    <p id="feature_website">Website</p>
+                    <i class="fa-solid fa-globe"></i>
+                    <a  id="feature_website" href="#">Không có trang web</a>
+                    
                 </div>
                 <div class="link_content">
+                    <i class="fa-solid fa-phone"></i>
                     <p id="feature_phone">Phone number</p>
                 </div>
             </div>

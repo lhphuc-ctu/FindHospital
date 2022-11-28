@@ -75,6 +75,7 @@ const featureType = document.querySelector("#feature_type");
 const featureAddress = document.querySelector("#feature_address");
 const featureWebsite = document.querySelector("#feature_website");
 const featurePhone = document.querySelector("#feature_phone");
+const featureImg = document.querySelector(".feature_img img")
 
 
 function featureData(feature){
@@ -82,8 +83,12 @@ function featureData(feature){
         if (feature.properties.name) featureName.replaceChildren(feature.properties.name);
         if (feature.properties.type) featureType.replaceChildren(feature.properties.type);
         if (feature.properties.address) featureAddress.replaceChildren(feature.properties.address);
-        if (feature.properties.website) featureWebsite.replaceChildren(feature.properties.website);
+        if (feature.properties.website) {featureWebsite.setAttribute('href',feature.properties.website);
+            featureWebsite.replaceChildren(feature.properties.website);
+        }
         if (feature.properties.phone_number) featurePhone.replaceChildren(feature.properties.phone_number);
+        if (feature.properties.img) featureImg.src="./images/"+feature.properties.img;
+            else featureImg.src="/assets/images/default_img.png";
     }
 }
 

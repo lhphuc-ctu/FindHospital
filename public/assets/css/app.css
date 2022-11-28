@@ -133,9 +133,17 @@ html, body{
 .link_content {
   display: flex;
   padding: 12px 22px;
-  font-size: 1.1rem;
+  font-size: 18px;
   align-items: center;
   color: #202124;
+}
+.link_content i {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.link_content #feature_website {
+  text-decoration: none;
 }
 
 .link_list img {

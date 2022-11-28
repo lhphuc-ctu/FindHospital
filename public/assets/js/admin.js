@@ -113,7 +113,9 @@ function featureData(feature){
             else featureImg.src="/assets/images/default_img.png";
         if (feature.properties.type) featureType.replaceChildren(feature.properties.type);
         if (feature.properties.address) featureAddress.replaceChildren(feature.properties.address);
-        if (feature.properties.website) featureWebsite.replaceChildren(feature.properties.website);
+        if (feature.properties.website) {featureWebsite.setAttribute('href',feature.properties.website);
+            featureWebsite.replaceChildren(feature.properties.website);
+        }
         if (feature.properties.phone_number) featurePhone.replaceChildren(feature.properties.phone_number);
     }
 }
