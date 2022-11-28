@@ -26,7 +26,7 @@ function addControlPlaceholders(map) {
 addControlPlaceholders(map);
 
 // Change the position of the Zoom Control to a newly created placeholder.
-map.zoomControl.setPosition('verticalcenterright');
+//map.zoomControl.setPosition('verticalcenterright');
 
 // You can also put other controls in the same placeholder.
 L.control.scale({position: 'verticalcenterright'}).addTo(map);
@@ -108,11 +108,45 @@ function setMap(data){
                 featureData(feature);
             });
             layer.on("mouseover",function(e){
-                layer.setIcon(pointclickedStyle);
+                if(feature.geometry.type === "Point") layer.setIcon(pointclickedStyle);
             });
             layer.on("mouseout",function(e){
-                layer.setIcon(pointdefaultStyle)
+                if(feature.geometry.type === "Point") layer.setIcon(pointdefaultStyle)
             });
         }
     }).addTo(layerObject);
 }
+
+var controlSearch = new L.Control.Search({
+    position:'topleft',		
+    layer: layerObject,
+    propertyName: 'name',
+    textErr: 'Không tìm thấy địa điểm',
+    initial: true,
+    marker: false,
+    zoom:18
+});
+
+controlSearch.on('search:locationfound', function(e) {
+    if(e.layer.feature.geometry.type != "Point") e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+});
+
+controlSearch.on('search:collapsed', function(e) {
+    layerObject.eachLayer(function(layer) {	//restore feature color
+        layer.resetStyle();
+    });	
+});
+
+map.addControl( controlSearch );
+
+var lc = L.control.locate({
+    strings: {
+        follow: true,
+        title: "Vị trí của tôi",
+        popup: "Bạn đang ở phạm vi {distance} mét từ điểm này" 
+    },
+    locateOptions: {
+        enableHighAccuracy: true
+      }
+  })
+  .addTo(map);

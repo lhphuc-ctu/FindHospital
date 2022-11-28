@@ -16,82 +16,42 @@ html, body{
   align-items: center;
 }
 
-.search_box {
-  min-width: 310px;
-  z-index: 500;
-  position: relative;
-  background: #fff;
-  padding: 5px 10px;
-  border-radius: 8px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-}
-
-.bars, 
-.search {
-  display: block;
-  cursor: pointer;
-  padding: 12px 16px;
-}
-
-.close {
-  cursor: pointer;
-}
-
-.input {
-  margin-right: auto;
-}
-
-.input input {
-  border: none;
-  outline: none;
-  background: transparent;
-}
-
-.user {
+.bars {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 31px;
+  height: 31px;
   right: 15px;
   top: 25px;
-  z-index: 500
+  z-index: 500;
+  border: 2px solid rgba(0,0,0,0.2);
+  background: #fff;
+  background-clip: padding-box;
+
 }
 
-.user #signin {
-  background-color: #1d89ff;
-  color: #fff;
-  border: none;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  border-radius: 99rem;
-  padding: 0.8rem 3rem;
-  position: relative;
-  font-size: 100%;
-  font-weight: 900;
-  line-height: 1.5;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.user i {
-  color: #fff;
-  font-size: 25px;
+.bars i {
+  color: #000;
+  font-size: 20px;
 }
 
 .navbar_menu {
   position: fixed;
   content: "";
   top: 0;
-  left: 0;
   background-color: #fff;
-  width: 300px;
+  width: 325px;
   height: 100%;
   z-index: 9999;
-  left: -500px;
+  right: -500px;
   transition: 0.5s;
   overflow-y: auto;
 }
 
 .navbar_menu.active {
-  left: 0;
+  right: 0;
 }
 
 .title {
@@ -126,23 +86,34 @@ html, body{
   padding-left: 10px;
 }
 
-.link_list {
+.link_list,
+.info_list {
   border-bottom: 1px solid #e5e5e5;
 }
 
 .link_content {
+  display: flex;
+  padding: 5px 22px;
+  font-size: 18px;
+  align-items: center;
+  color: #202124;
+}
+
+.info_content{
   display: flex;
   padding: 12px 22px;
   font-size: 18px;
   align-items: center;
   color: #202124;
 }
-.link_content i {
+
+.link_content i,
+.info_content i {
   font-size: 1.5rem;
   margin-right: 10px;
 }
 
-.link_content #feature_website {
+.info_content #feature_website {
   text-decoration: none;
 }
 
@@ -151,6 +122,20 @@ html, body{
   width: 24px;
   cursor: pointer;
   opacity: 0.65;
+}
+
+.link_image i {
+  font-size: 1.3rem;
+  margin-left: 4px;
+}
+
+.list_desc a {
+  margin-left: 10px;
+  text-decoration: none;
+  color: black;
+  display: inline-block;
+  font-size: 17px;
+  cursor: pointer;
 }
 
 .link_list label {
@@ -294,13 +279,13 @@ html, body{
 }
 
 .save-btn{
-  width: 44px;
-  height: 44px;
+  width: 31px;
+  height: 31px;
   border: none;
 }
 
 .save-btn i {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .feature_menu,
@@ -413,38 +398,13 @@ html, body{
 }
 
 .leaflet-top {
-  top: 15%
+  top: 10%
 }
 
 .leaflet-left {
   left: 1%;
 }
 
-.leaflet-touch .leaflet-control-zoom-display {
-  width: 48px;
-  height: 48px;
-  font-size: 18px;
-  line-height: 30px;
-}
-
-.leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-toolbar-0 > li > a {
-  width: 44px;
-  height: 44px;
-  font-size: 20px;
-  line-height: 45px;
-  background-size: 314px 30px;
-}
-
-.leaflet-touch .leaflet-draw-toolbar.leaflet-bar a {
-  background-position-y: 6px;
-}
-
-.leaflet-touch .leaflet-draw-actions a, .leaflet-touch .leaflet-control-toolbar .leaflet-toolbar-1 > li > .leaflet-toolbar-icon {
-  font-size: 20px;
-  line-height: 44px;
-  height: 44px;
-}
-
-.leaflet-touch .leaflet-draw-actions, .leaflet-touch .leaflet-toolbar-1 {
-  left: 45px;
+.leaflet-top.leaflet-left{
+  top: 5%
 }

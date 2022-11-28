@@ -24,7 +24,7 @@ function addControlPlaceholders(map) {
 addControlPlaceholders(map);
 
 // Change the position of the Zoom Control to a newly created placeholder.
-map.zoomControl.setPosition('verticalcenterright');
+//map.zoomControl.setPosition('verticalcenterright');
 
 // You can also put other controls in the same placeholder.
 L.control.scale({position: 'verticalcenterright'}).addTo(map);
@@ -278,3 +278,25 @@ function reload() {
     layerObject.clearLayers();
     $.getJSON(geturl + sql, function(data){ setMap(data) });
 };
+
+var controlSearch = new L.Control.Search({
+    position:'topleft',		
+    layer: layerObject,
+    propertyName: 'name',
+    textErr: 'Không tìm thấy địa điểm',
+    initial: true,
+    marker: false,
+    zoom:18
+});
+
+controlSearch.on('search:locationfound', function(e) {
+    if(e.layer.feature.geometry.type != "Point") e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+});
+
+controlSearch.on('search:collapsed', function(e) {
+    layerObject.eachLayer(function(layer) {	//restore feature color
+        layer.resetStyle();
+    });	
+});
+
+map.addControl( controlSearch );

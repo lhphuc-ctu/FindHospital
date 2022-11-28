@@ -32,4 +32,7 @@ Credits
 =======
 
 * Leaflet/Leaflet
+* sstefanocudini/leaflet-search
+* domoritz/leaflet-locatecontrol
 * spinen/laravel-geometry
+

@@ -1,15 +1,4 @@
 <div class="main_header">
-    <div class="search_box">
-        <div class="bars">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        <div class="input">
-            <input type="text" placeholder="Tìm kiếm địa điểm" />
-        </div>
-        <div class="search">
-            <i class="fa-sharp fa-solid fa-magnifying-glass search_icon"></i>
-        </div>
-    </div>
     <div class="navbar_menu">
         <div class="title">
             <div class="title_image">
@@ -19,6 +8,37 @@
             <div class="close">
                 <i class="fa-solid fa-xmark"></i>
             </div>
+        </div>
+        <div class="link_list">
+            <?php if (Auth::check()) :  ?>
+                <?php $user=Auth::user() ?? null; if ($user->role == "admin") : ?>
+                    <div class="link_content">
+                        <div class="list_image">
+                            <i class="fa-solid fa-map"></i>
+                        </div>
+                        <div class="list_desc">
+                            <a id="admin" href="/admin">Chỉnh sửa Bản đồ</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                    <div class="link_content">
+                        <div class="list_image">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </div>
+                        <div class="list_desc">
+                            <a role="button" href="/logout">Đăng xuất</a>
+                        </div>
+                    </div>
+            <?php else : ?>
+                <div class="link_content">
+                        <div class="list_image">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </div>
+                        <div class="list_desc">
+                            <a id="signin" href="/login">Đăng nhập</a>
+                        </div>
+                    </div>
+            <?php endif; ?>
         </div>
         <div class="link_list">
             <div class="link_content">
@@ -69,19 +89,6 @@
         </div>
     </div>
 </div>
-<div class="user">
-        <?php if (Auth::check()) :  ?>
-            <div class="dropdown">
-                <i class="fa-solid fa-circle-user"></i>
-                <div class="dropdown-content">
-                    <?php $user=Auth::user() ?? null; if ($user->role == "admin") : ?>
-                        <a id="admin" href="/admin">Map Editor</a>
-                        <hr>
-                    <?php endif; ?>
-                    <a role="button" href="/logout">Log Out</a>
-                </div>
-            </div>
-        <?php else : ?>
-            <a id="signin" href="/login">Log In</a>
-        <?php endif; ?>
-    </div>
+<div class="bars">
+    <i class="fa-solid fa-bars"></i>
+</div>
