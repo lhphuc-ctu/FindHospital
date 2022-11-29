@@ -220,25 +220,10 @@ function setMap(data){
 var deleteurl = "./deleteGeo";
 
 featureDelete.addEventListener('click', function(){
-    Swal.fire({
-        title: 'Xác nhận xoá?',
-        text: "Bạn có chắc muốn xoá vị trí này!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xác nhận!',
-        cancelButtonText: 'Hủy'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire(
-            'Đã xoá!',
-            'Vị trí đã được xoá.',
-            'xoá thành công'
-          )
-          deleteFeature();
-        }
-      })
+    if (confirm("Bạn có chắc chắn muốn xoá!") == true) {
+        deleteFeature();
+        alert("Xoá thành công!")
+    }
 });
 
 function deleteFeature (){
@@ -338,12 +323,7 @@ $("#save").on("click", function() {
             data: {"q": sql2},
             dataType: "json",
             success: function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Vị trí đã được lưu',
-                    showConfirmButton: false,
-                    timer: 500
-                })
+                alert("Thêm thành công!");
                 reload();
             },  
             error: function() {
@@ -374,12 +354,7 @@ $("#edit").on("click", function() {
         data: {"q": sql3},
         dataType: "json",
         success: function() {
-            Swal.fire({
-                icon: 'success',
-                title: 'Chỉnh sửa thành công',
-                showConfirmButton: false,
-                timer: 500
-            })
+            alert("Đã chỉnh sửa thông tin!");
             reload();
         },  
         error: function() {
