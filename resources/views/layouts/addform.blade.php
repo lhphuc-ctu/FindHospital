@@ -2,7 +2,7 @@
     <div class="addfeature_menu">
         <form class="addform" method="post" enctype="multipart/form-data">
             <div class="feature_img">
-                <img src="/assets/images/default_img.png">
+                <img id="imgedit" src="/assets/images/default_img.png">
             </div>
             <div class="link_list">
                 <div class="link_content">
@@ -29,7 +29,8 @@
                     <input type="text" id="phone_number" class="input-field" placeholder="Thông tin liên lạc">
                 </div>
             </div>
-            <input type="button" value="Nhập" id="submit">
+            <input class="addbutton" type="button" value="Nhập" id="submit">
+            <input class="addbutton" type="hidden" value="Chỉnh sửa" id="edit">
         </form>
     </div>
     <div class="addfcontrol">

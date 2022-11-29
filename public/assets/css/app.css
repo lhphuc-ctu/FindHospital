@@ -342,7 +342,7 @@ html, body{
   color: #000;
 }
 
-.addfeature_menu .addform #submit {
+.addfeature_menu .addform .addbutton {
   width: 45%;
   padding: 10px 20px;
   display: block;

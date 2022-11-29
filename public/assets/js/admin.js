@@ -1,4 +1,6 @@
-//Ban do nen
+//==========================
+//          Map
+//==========================
 var map = L.map('map').setView([10.031021579004767, 105.76911459944654], 13);
 
 var mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -7,8 +9,10 @@ var mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 });
 mapLayer.addTo(map);
 
-// Create additional Control placeholders
-function addControlPlaceholders(map) {
+//==========================
+//          Scale
+//==========================
+function addControlPlaceholders(map) { // Create additional Control placeholders
     var corners = map._controlCorners,
         l = 'leaflet-',   
         container = map._controlContainer;
@@ -23,14 +27,12 @@ function addControlPlaceholders(map) {
 }
 addControlPlaceholders(map);
 
-// Change the position of the Zoom Control to a newly created placeholder.
-//map.zoomControl.setPosition('verticalcenterright');
-
-// You can also put other controls in the same placeholder.
 L.control.scale({position: 'verticalcenterright'}).addTo(map);
+//map.zoomControl.setPosition('verticalcenterright'); // Change the position of the Zoom Control to a newly created placeholder.
 
-var layerObject = L.layerGroup().addTo(map);
-
+//==========================
+//          Style
+//==========================
 //Định dạng các style cho point, line và polygon
 var pointclickedStyle = L.icon({
     iconUrl: './assets/leaflet/images/redicon.png',
@@ -55,54 +57,21 @@ var pointdefaultStyle = L.icon({
 var lineStyle={color: "blue", weight: 2};
 var polygonStyle={color: "red", fillColor: "yellow", weight: 4};
 
-var geturl = './getGeo?format=GeoJSON&q=' //Url lấy data dạng GeoJSON
-var sql = "SELECT Id,  AsText(geometry) AS wkt, name, type, address, website, phone_number, img FROM location";
+//==========================
+// Function
+//==========================
+function setEditData(){ //Gan du lieu cho form sua
+    editName.value = featureName.innerHTML;
+    editType.value = featureType.innerHTML;
+    editAddress.value = featureAddress.innerHTML;
+    editWebsite.value = featureWebsite.innerHTML;
+    editPhone.value = featurePhone.innerHTML;
+    editImg.src = featureImg.src;
+    strImg = featureImg.src;
+    editImgName.value = strImg.substr(strImg.lastIndexOf('/')+1,strImg.length);
+}
 
-$.getJSON(geturl + sql, function(data){ setMap(data) });
-
-const info = document.querySelector(".feature_menu");
-const infoClose = document.querySelector(".fcontrol")
-
-infoClose.addEventListener('click', fmenuHide);
-
-const featureName = document.querySelector("#feature_name");
-const featureType = document.querySelector("#feature_type");
-const featureAddress = document.querySelector("#feature_address");
-const featureWebsite = document.querySelector("#feature_website");
-const featurePhone = document.querySelector("#feature_phone");
-const featureEdit = document.querySelector(".featureEdit");
-const featureDelete = document.querySelector(".featureDelete");
-const featureImg = document.querySelector(".feature_img img")
-
-featureEdit.addEventListener('click', function(){
-
-});
-
-var deleteurl = "./deleteGeo";
-featureDelete.addEventListener('click', function(){
-    var id = featureDelete.value;
-    if(id){
-        var sql4 = "DELETE FROM `location` WHERE id="+id;
-        $.post({
-            url: deleteurl,
-            data: {"q": sql4},
-            dataType: "json",
-            success: function() {
-                alert("Xoá thành công!");
-                fmenuHide();
-                reload();
-            },
-            error: function() {
-                alert("Có lỗi xảy ra khi xoá dữ liệu");
-            }
-        });
-    }
-    else{
-        alert("Đối tượng không hợp lệ")
-    }
-});
-
-function featureData(feature){
+function featureData(feature){ //Gan du lieu cho form thong tin
     if (feature.properties){
         if (feature.properties.id) {
             featureDelete.value = feature.properties.id;
@@ -116,8 +85,23 @@ function featureData(feature){
         if (feature.properties.website) {featureWebsite.setAttribute('href',feature.properties.website);
             featureWebsite.replaceChildren(feature.properties.website);
         }
+        else {featureWebsite.setAttribute('href','#');
+            featureWebsite.replaceChildren("Không có website");
+        }
         if (feature.properties.phone_number) featurePhone.replaceChildren(feature.properties.phone_number);
     }
+}
+
+function setFeatureData(){ //lay du lieu ve feature
+    layer.feature={};
+    layer.feature.type="Feature";
+    layer.feature.properties={};
+    layer.feature.properties.name=$("#name").val();
+    layer.feature.properties.type=$("#type").val();
+    layer.feature.properties.img=$("#img_name").val();
+    layer.feature.properties.address=$("#address").val();
+    layer.feature.properties.website=$("#website").val();
+    layer.feature.properties.phone_number=$("#phone_number").val();
 }
 
 function fmenuShow(){
@@ -130,7 +114,85 @@ function fmenuHide(){
     infoClose.classList.remove('active');
 }
 
-function setMap(data){
+function addShow(){
+    add.classList.add('active');
+    addcose.classList.add('active');
+}
+
+function addHide(){
+    add.classList.remove('active');
+    addcose.classList.remove('active');
+}
+
+function reload() {
+    layerObject.clearLayers();
+    $.getJSON(geturl + sql, function(data){ setMap(data) });
+};
+//==========================
+//      Varialbe
+//==========================
+const info = document.querySelector(".feature_menu");
+const infoClose = document.querySelector(".fcontrol")
+
+const editName = document.querySelector("#name");
+const editType = document.querySelector("#type");
+const editAddress = document.querySelector("#address");
+const editWebsite = document.querySelector("#website");
+const editPhone = document.querySelector("#phone_number");
+const editImg = document.querySelector("#imgedit");
+const editImgName = document.querySelector("#img_name");
+
+const featureName = document.querySelector("#feature_name");
+const featureType = document.querySelector("#feature_type");
+const featureAddress = document.querySelector("#feature_address");
+const featureWebsite = document.querySelector("#feature_website");
+const featurePhone = document.querySelector("#feature_phone");
+const featureEdit = document.querySelector(".featureEdit");
+const featureDelete = document.querySelector(".featureDelete");
+const featureImg = document.querySelector("#imginfo")
+
+const add = document.querySelector(".addfeature_menu");
+const addcose = document.querySelector(".addfcontrol")
+
+const inputFile = document.querySelector("#img");
+
+const submitbtn = document.querySelector(".addform #submit");
+const editbtn = document.querySelector(".addform #edit");
+
+//==========================
+//      Catch Event
+//==========================
+infoClose.addEventListener('click', fmenuHide);
+
+featureEdit.addEventListener('click', function(){
+    fmenuHide();
+    setEditData();
+    addShow();
+    submitbtn.type = "hidden";
+    editbtn.type = "button";
+});
+
+addcose.addEventListener('click', addHide);
+
+inputFile.addEventListener('change', function(){
+    $(".addform").submit();
+})
+
+submitbtn.addEventListener("click", function(){
+    addHide();
+    setFeatureData();
+});
+//==========================
+// Get Feature
+//==========================
+var layerObject = L.layerGroup().addTo(map);
+
+var geturl = './getGeo?format=GeoJSON&q=' //Url lấy data dạng GeoJSON
+var sql = "SELECT Id,  AsText(geometry) AS wkt, name, type, address, website, phone_number, img FROM location";
+
+$.getJSON(geturl + sql, function(data){ setMap(data) });
+
+function setMap(data){ 
     L.geoJSON(data, {
         style: function (feature) {
             switch (feature.geometry.type) {
@@ -144,15 +206,66 @@ function setMap(data){
                 featureData(feature);
             });
             layer.on("mouseover",function(e){
-                layer.setIcon(pointclickedStyle);
+                if(feature.geometry.type === "Point") layer.setIcon(pointclickedStyle);
             });
             layer.on("mouseout",function(e){
-                layer.setIcon(pointdefaultStyle)
+                if(feature.geometry.type === "Point") layer.setIcon(pointdefaultStyle)
             });
         }
     }).addTo(layerObject);
 }
+//==========================
+// Delete Feature
+//==========================
+var deleteurl = "./deleteGeo";
 
+featureDelete.addEventListener('click', function(){
+    Swal.fire({
+        title: 'Xác nhận xoá?',
+        text: "Bạn có chắc muốn xoá vị trí này!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xác nhận!',
+        cancelButtonText: 'Hủy'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Đã xoá!',
+            'Vị trí đã được xoá.',
+            'xoá thành công'
+          )
+          deleteFeature();
+        }
+      })
+});
+
+function deleteFeature (){
+    var id = featureDelete.value;
+    if(id){
+        var sql4 = "DELETE FROM `location` WHERE id="+id;
+        $.post({
+            url: deleteurl,
+            data: {"q": sql4},
+            dataType: "json",
+            success: function() {
+                fmenuHide();
+                reload();
+            },
+            error: function() {
+                alert("Có lỗi xảy ra khi xoá dữ liệu");
+            }
+        });
+    }
+    else{
+        alert("Đối tượng không hợp lệ")
+    }
+}
+
+//==========================
+// Draw & Save Feature
+//==========================
 //Thêm điều khiển vẽ; Icon mặc nhiên trong thư mục css/images
 var drawnItems = L.featureGroup().addTo(map);
 new L.Control.Draw({ edit: { featureGroup: drawnItems }, position: "topright" }).addTo(map);
@@ -168,20 +281,6 @@ control.onAdd = function(map) {
     return div;
 };
 control.addTo(map);
-
-const add = document.querySelector(".addfeature_menu");
-const addcose = document.querySelector(".addfcontrol")
-addcose.addEventListener('click', addHide);
-
-function addShow(){
-    add.classList.add('active');
-    addcose.classList.add('active');
-}
-
-function addHide(){
-    add.classList.remove('active');
-    addcose.classList.remove('active');
-}
 
 //Khi vẽ thì thêm vào lớp drawnItems
 map.on("draw:created", function(e) {
@@ -213,30 +312,6 @@ $(".addform").on('submit', function(e){
     })
 })
 
-const inputFile = document.querySelector("#img");
-inputFile.addEventListener('change', function(){
-    $(".addform").submit();
-})
-
-const submitbtn = document.querySelector(".addform #submit");
-submitbtn.addEventListener("click", function(){
-    addHide();
-    setFeatureData();
-});
-
-function setFeatureData(){
-    layer.feature={};
-    layer.feature.type="Feature";
-    layer.feature.properties={};
-    layer.feature.properties.name=$("#name").val();
-    layer.feature.properties.type=$("#type").val();
-    layer.feature.properties.img=$("#img_name").val();
-    layer.feature.properties.address=$("#address").val();
-    layer.feature.properties.website=$("#website").val();
-    layer.feature.properties.phone_number=$("#phone_number").val();
-    console.log(layer.feature);
-}
-
 var seturl = "./setGeo";
 
 $.ajaxSetup({
@@ -263,7 +338,12 @@ $("#save").on("click", function() {
             data: {"q": sql2},
             dataType: "json",
             success: function() {
-                alert("Thêm thành công!");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Vị trí đã được lưu',
+                    showConfirmButton: false,
+                    timer: 500
+                })
                 reload();
             },  
             error: function() {
@@ -273,12 +353,44 @@ $("#save").on("click", function() {
     });
     drawnItems.clearLayers();
 });
+//==========================
+// Edit Feature
+//==========================
+$("#edit").on("click", function() {
 
-function reload() {
-    layerObject.clearLayers();
-    $.getJSON(geturl + sql, function(data){ setMap(data) });
-};
+    setFeatureData(); addHide();
+    submitbtn.type = "button"; editbtn.type = "hidden"; 
 
+    var sql3 = "UPDATE location SET name = '"+layer.feature.properties.name+"' "
+    +",type = '"+layer.feature.properties.type+"' "
+    +",address = '"+layer.feature.properties.address+"' "
+    +",website = '"+layer.feature.properties.website+"' "
+    +",phone_number = '"+layer.feature.properties.phone_number+"' "
+    +",img = '"+layer.feature.properties.img+"' "
+    +"WHERE id ='"+featureEdit.value+"'";
+    
+    $.post({
+        url: seturl,
+        data: {"q": sql3},
+        dataType: "json",
+        success: function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Chỉnh sửa thành công',
+                showConfirmButton: false,
+                timer: 500
+            })
+            reload();
+        },  
+        error: function() {
+            alert("Có lỗi xảy ra!");
+        }
+    });
+})
+
+//==========================
+// Search Feature
+//==========================
 var controlSearch = new L.Control.Search({
     position:'topleft',		
     layer: layerObject,
@@ -300,3 +412,19 @@ controlSearch.on('search:collapsed', function(e) {
 });
 
 map.addControl( controlSearch );
+
+//==========================
+//        Location
+//==========================
+var lc = L.control.locate({
+    strings: {
+        follow: true,
+        title: "Vị trí của tôi",
+        popup: "Bạn đang ở phạm vi {distance} mét từ điểm này" 
+    
+    },
+    // locateOptions: {
+    //     enableHighAccuracy: true
+    //   }
+  })
+  .addTo(map);
